@@ -638,7 +638,13 @@ document.querySelectorAll('.tabbar button').forEach(b => b.addEventListener('cli
 
 /* ---------- sheets / toast ---------- */
 let openSheets = [];
-function show(sheet){ sheet.hidden = false; sheet.scrollTop = 0; if (!openSheets.includes(sheet)) openSheets.push(sheet); document.body.style.overflow = 'hidden'; }
+/* The most recently opened sheet always sits on top (e.g. 編集 opened from the detail page). */
+function show(sheet){
+  sheet.hidden = false; sheet.scrollTop = 0;
+  openSheets = openSheets.filter(s => s !== sheet); openSheets.push(sheet);
+  openSheets.forEach((s, i) => { s.style.zIndex = String(10 + i); });
+  document.body.style.overflow = 'hidden';
+}
 function hide(sheet){ sheet.hidden = true; openSheets = openSheets.filter(s => s !== sheet); if (!openSheets.length) document.body.style.overflow = ''; }
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => hide(b.closest('.sheet'))));
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && openSheets.length) hide(openSheets[openSheets.length - 1]); });
@@ -830,7 +836,7 @@ $('#editForm').addEventListener('submit', async e => {
   let msg = prev ? '直しました' : `${entries.length}杯目を記録しました`;
   if (fromWishId) { try { await del('wish', fromWishId); } catch {} wishes = wishes.filter(w => w.id !== fromWishId); fromWishId = null; msg = '記録して「行ってみたい」から外しました'; hide($('#wishSheet')); }
   hide($('#editSheet'));
-  if (!$('#detailSheet').hidden) openDetail(entry.id);
+  if (!$('#detailSheet').hidden) openDetail(entry.id, true);
   renderAll(); toast(msg);
 });
 
@@ -840,7 +846,7 @@ function dataURLtoFile(url, name){
   for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
   return new File([u8], name, {type: head.match(/:(.*?);/)[1]});
 }
-function openDetail(id){
+function openDetail(id, refreshOnly){
   const e = shown().find(x => x.id === id); if (!e) return;
   const map = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([e.shop, e.pref, e.place].filter(Boolean).join(' '))}`;
   const realPhoto = e.photo && e.photo.startsWith('data:image/jpeg');
@@ -881,7 +887,7 @@ function openDetail(id){
       hide($('#detailSheet')); renderAll(); toast('削除しました');
     };
   }
-  show($('#detailSheet'));
+  if (!refreshOnly) show($('#detailSheet'));
 }
 
 /* ---------- 行ってみたい ---------- */
