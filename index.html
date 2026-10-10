@@ -210,7 +210,11 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 .mgrid.many{grid-template-columns:repeat(3,1fr)}.mgrid.many button{aspect-ratio:1}
 .mgrid.many.r1 button:last-child{grid-column:span 3;aspect-ratio:3/1}
 .mgrid.many.r2 button:nth-last-child(2){grid-column:span 2;aspect-ratio:auto}
-.mgrid.big{grid-template-columns:1fr;gap:8px;border-radius:0;overflow:visible}.mgrid.big button{aspect-ratio:4/3;border-radius:var(--r);overflow:hidden}
+.mgrid.big{grid-template-columns:1fr;gap:8px;border-radius:0;overflow:visible}.mgrid.big+.mgrid.sq{margin-top:8px}.mgrid.big button{aspect-ratio:1;border-radius:var(--r);overflow:hidden}
+.mgrid.wide{grid-template-columns:1fr;gap:8px;border-radius:0;overflow:visible}.mgrid.wide button{aspect-ratio:16/9;border-radius:var(--r);overflow:hidden}
+.psec.wide .pthumbs{grid-template-columns:1fr;gap:8px}.psec.big .pthumbs{grid-template-columns:repeat(3,1fr);gap:2px}.psec.big .pthumb{aspect-ratio:1;border-radius:0;border:0}.psec.big .pthumb:first-child{grid-column:1/-1;border-radius:var(--r);margin-bottom:6px}.psec.wide .pthumb{aspect-ratio:16/9;border-radius:var(--r)}
+.psec.big .pthumb:first-child .px,.psec.wide .px{top:8px;right:8px;width:32px;height:32px;line-height:32px;font-size:18px}
+.pone{display:flex;align-items:center;justify-content:center;gap:6px;width:100%}.pone svg{width:18px;height:18px}
 .mgrid.sq{grid-template-columns:repeat(3,1fr);border-radius:0;margin-inline:-16px}.mgrid.sq button{aspect-ratio:1}
 .psec.sq .pthumbs{grid-template-columns:repeat(3,1fr);gap:2px}.psec.sq .pthumb{border-radius:0;border:0}
 .viewer{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -549,10 +553,9 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
         <div class="photo-row"><button class="linkbtn" type="button" id="photoClear" hidden>写真を外す</button></div>
       </div>
 
-      <div class="psec" data-ps="ramenPhotos"><span class="flabel">ラーメンの写真</span><div class="pthumbs"></div><div class="pbtns2"><button class="btn cambtn" type="button" data-pcam><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>カメラ</button><button class="btn cambtn" type="button" data-plib><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダ</button></div></div>
-      <div class="psec" data-ps="menuPhotos"><span class="flabel">メニュー</span><div class="pthumbs"></div><div class="pbtns2"><button class="btn cambtn" type="button" data-pcam><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>カメラ</button><button class="btn cambtn" type="button" data-plib><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダ</button></div></div>
-      <div class="psec sq" data-ps="sidePhotos"><span class="flabel">その他</span><div class="pthumbs"></div><div class="pbtns2"><button class="btn cambtn" type="button" data-pcam><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>カメラ</button><button class="btn cambtn" type="button" data-plib><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダ</button></div></div>
-      <input id="pcIn" type="file" accept="image/*" capture="environment" hidden>
+      <div class="psec big" data-ps="ramenPhotos"><span class="flabel">ラーメンの写真</span><div class="pthumbs"></div><button class="btn cambtn pone" type="button" data-plib><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダから追加</button></div>
+      <div class="psec wide" data-ps="menuPhotos"><span class="flabel">メニュー</span><div class="pthumbs"></div><button class="btn cambtn pone" type="button" data-plib><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダから追加</button></div>
+      <div class="psec sq" data-ps="sidePhotos"><span class="flabel">その他</span><div class="pthumbs"></div><button class="btn cambtn pone" type="button" data-plib><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダから追加</button></div>
       <input id="plIn" type="file" accept="image/*" multiple hidden>
 
       <div class="field"><label for="fShop">店名 <span class="req">*</span></label><input id="fShop" autocomplete="off" placeholder="例：麺処 しおさい"><div class="err" id="shopErr" hidden>店名を入れてください</div></div>
@@ -1041,7 +1044,7 @@ async function takePhoto(e, fromCamera){
 $('#photoClear').addEventListener('click', () => setPhoto(''));
 
 /* ---------- ラーメン・メニュー・サイドメニューの写真 (何枚でも) ---------- */
-const PSECS = [['ramenPhotos', 'ラーメン', 'big'], ['menuPhotos', 'メニュー', ''], ['sidePhotos', 'その他', 'sq']];
+const PSECS = [['ramenPhotos', 'ラーメン', 'big'], ['menuPhotos', 'メニュー', 'wide'], ['sidePhotos', 'その他', 'sq']];
 const PHOTO_MAX = {ramenPhotos:20, menuPhotos:20, sidePhotos:100};
 let extra = {ramenPhotos:[], menuPhotos:[], sidePhotos:[]}, pTarget = 'ramenPhotos';
 function renderPSecs(){
@@ -1054,8 +1057,7 @@ $$('.psec').forEach(sec => sec.addEventListener('click', e => {
   const k = sec.dataset.ps;
   const d = e.target.closest('[data-pdel]');
   if (d) { extra[k].splice(Number(d.dataset.pdel), 1); renderPSecs(); return; }
-  if (e.target.closest('[data-pcam]')) { pTarget = k; $('#pcIn').click(); }
-  else if (e.target.closest('[data-plib]')) { pTarget = k; $('#plIn').click(); }
+  if (e.target.closest('[data-plib]')) { pTarget = k; $('#plIn').click(); }
 }));
 async function addExtra(ev){
   const files = [...(ev.target.files || [])]; ev.target.value = '';
@@ -1068,7 +1070,6 @@ async function addExtra(ev){
   }
   renderPSecs();
 }
-$('#pcIn').addEventListener('change', addExtra);
 $('#plIn').addEventListener('change', addExtra);
 
 /* 詳細ページ: すき間なく並べる・タップで大きく */
@@ -1077,7 +1078,11 @@ function photoSecsHTML(e){
     const ps = (e[k] || []).filter(p => typeof p === 'string' && p);
     if (!ps.length) return '';
     const n = ps.length, cls = mode ? mode : n <= 3 ? 'n' + n : `many${n % 3 ? ' r' + (n % 3) : ''}`;
-    return `<section class="dsec"><h4>${label}<span style="color:var(--muted);font-weight:500"> ${n}枚</span></h4><div class="mgrid ${cls}">${ps.map((p, i) => `<button type="button" data-pv="${k}:${i}" aria-label="${label}の写真${i + 1}枚目を大きく見る"><img src="${p}" alt="" loading="lazy"></button>`).join('')}</div></section>`;
+    const tile = (p, i) => `<button type="button" data-pv="${k}:${i}" aria-label="${label}の写真${i + 1}枚目を大きく見る"><img src="${p}" alt="" loading="lazy"></button>`;
+    const grid = mode === 'big'   // 1枚目だけ大きな正方形、2枚目からは正方形3列
+      ? `<div class="mgrid big">${tile(ps[0], 0)}</div>${n > 1 ? `<div class="mgrid sq">${ps.slice(1).map((p, i) => tile(p, i + 1)).join('')}</div>` : ''}`
+      : `<div class="mgrid ${cls}">${ps.map(tile).join('')}</div>`;
+    return `<section class="dsec"><h4>${label}<span style="color:var(--muted);font-weight:500"> ${n}枚</span></h4>${grid}</section>`;
   }).join('');
 }
 function openViewer(src){ $('#viewerImg').src = src; $('#viewer').hidden = false; }
