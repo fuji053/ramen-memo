@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
 <style>
 /* Layout: one-column phone notebook with a 4-tab bottom bar; each bowl is a meal-ticket card, ticket-machine LED for numbers, bowl-rim 雷紋 band as the one flourish */
 :root{
@@ -143,8 +144,8 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 /* FAB + tab bar */
 .fab{position:fixed;right:16px;bottom:calc(var(--tabbar) + var(--sab) + 14px);z-index:6;display:flex;align-items:center;gap:8px;border:0;background:var(--ink);color:var(--bg);border-radius:999px;padding:14px 20px 14px 16px;font-weight:700;font-size:15px;box-shadow:0 6px 18px rgba(0,0,0,.22)}
 .fab svg{width:22px;height:22px}
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:7;display:grid;grid-template-columns:repeat(4,1fr);background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:var(--sab)}
-.tabbar button{height:var(--tabbar);border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:7;display:grid;grid-template-columns:repeat(5,1fr);background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:var(--sab)}
+.tabbar button{height:var(--tabbar);border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10.5px;letter-spacing:-.03em;font-weight:700;color:var(--muted);white-space:nowrap;min-width:0;overflow:hidden}
 .tabbar svg{width:24px;height:24px}
 .tabbar button[aria-current="page"]{color:var(--ink)}
 .tabbar button[aria-current="page"] svg{color:var(--yolk)}
@@ -249,6 +250,52 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
   .sheet:not([hidden]){animation:up .22s ease-out}
   @keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
 }
+
+/* SNS buttons (app-icon tiles) */
+.linkrow{display:flex;flex-wrap:wrap;gap:12px 10px;margin-top:12px}
+.lbtn{border:0;background:none;padding:0;width:62px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--ink)}
+.lico{position:relative;width:56px;height:56px;border-radius:13px;background:#333;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;line-height:1.05;box-shadow:0 2px 6px rgba(0,0,0,.18);overflow:hidden;padding:4px}
+.lico img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.lbtn .lico.img{color:transparent;background:#fff}
+.lbtn.ig .lico{background:linear-gradient(45deg,#F58529,#DD2A7B 55%,#8134AF)}
+.lbtn.tt .lico{background:#111}
+.lname{font-size:11px;line-height:1.2;color:var(--muted)}
+.lbtn:active .lico{transform:scale(.94)}
+/* full screen map (Google-Maps-like) */
+.mapfull:not([hidden]){position:fixed;inset:0;z-index:20;background:#EAE7E1}
+.mapfull #mapBox{position:absolute;inset:0}
+.mtop{position:absolute;left:0;right:0;top:0;z-index:500;padding:calc(var(--sat) + 10px) 12px 0;pointer-events:none}
+.mtop>*{pointer-events:auto}
+.msearch{display:flex;align-items:center;gap:4px;background:#fff;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.22);padding:4px 14px 4px 4px;max-width:640px;margin:0 auto}
+.msearch input{flex:1;min-width:0;border:0;background:none;font-size:16px;padding:10px 4px;color:#202124;outline:none}
+.mbtn{width:40px;height:40px;border-radius:50%;border:0;background:none;color:#3c4043;display:flex;align-items:center;justify-content:center;padding:0}
+.mbtn svg{width:22px;height:22px}
+.mchips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;max-width:640px;margin:0 auto;scrollbar-width:none}
+.mchips::-webkit-scrollbar{display:none}
+.mchips button{flex:none;display:flex;align-items:center;gap:6px;border:0;background:#fff;color:#3c4043;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.mchips button[aria-pressed="false"]{background:#f1f3f4;color:#80868b}
+.mchips i{width:10px;height:10px;border-radius:50%;display:block}
+.mchips button[aria-pressed="false"] i{opacity:.35}
+.mresults{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.2);max-width:640px;margin:6px auto 0;max-height:50vh;overflow-y:auto}
+.mresults button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #eee;background:#fff;color:#202124;padding:12px 16px;font-size:15px}
+.mresults button span{display:block;font-size:12px;color:#70757a}
+.msub{max-width:640px;margin:6px auto 0;background:rgba(255,255,255,.95);color:#3c4043;border-radius:12px;padding:8px 12px;font-size:13px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.mlocate{position:absolute;right:14px;bottom:calc(var(--sab) + 28px);z-index:500;width:52px;height:52px;border-radius:50%;border:0;background:#fff;color:#1a73e8;box-shadow:0 2px 8px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center}
+.mlocate svg{width:24px;height:24px}
+.mcard{position:absolute;left:10px;right:10px;bottom:calc(var(--sab) + 12px);z-index:510;max-width:620px;margin:0 auto;background:#fff;color:#202124;border-radius:18px;box-shadow:0 4px 18px rgba(0,0,0,.28);padding:12px;display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center}
+.mcard[hidden]{display:none}
+.mcard img,.mcard .noimg{width:84px;height:84px;border-radius:12px;object-fit:cover;background:#eee;display:block}
+.mcard h3{margin:0;font-size:17px;line-height:1.3}
+.mcard .mmeta{font-size:13px;color:#70757a;margin-top:2px}
+.mcard .mrow{display:flex;gap:8px;margin-top:8px}
+.mcard .mrow a,.mcard .mrow button{border:1px solid #dadce0;background:#fff;color:#1a73e8;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;text-decoration:none}
+.mcard .mrow .pri{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.mcard .mx{position:absolute;top:6px;right:6px;width:30px;height:30px;border:0;background:none;color:#5f6368;font-size:18px}
+.gpin{cursor:pointer}
+.gpin svg{display:block;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.hereDot{width:18px;height:18px;border-radius:50%;background:#1a73e8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.2),0 1px 4px rgba(0,0,0,.3)}
+.mapfull .maplibregl-ctrl-attrib{font-size:10px}
+body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
 </style>
 </head>
 <body>
@@ -336,6 +383,21 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
     <div class="typesum" id="typeSum"></div>
     <div class="list" id="typeList"></div>
   </section>
+
+  <section id="view-map" class="view mapfull" hidden>
+    <div id="mapBox"></div>
+    <div class="mtop">
+      <div class="msearch">
+        <button class="mbtn" type="button" id="mapClose" aria-label="地図を閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <input id="mapQuery" type="search" placeholder="お店を検索" aria-label="お店を検索" autocomplete="off" enterkeyhint="search">
+      </div>
+      <div class="mchips" id="mapLegend"></div>
+      <div class="mresults" id="mapResults" hidden></div>
+      <p class="msub" id="mapSub" hidden></p>
+    </div>
+    <button class="mlocate" type="button" id="mapLocate" aria-label="現在地を表示"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
+    <div class="mcard" id="mapCard" hidden></div>
+  </section>
 </div>
 
 <button class="fab" id="fab" type="button">
@@ -351,6 +413,9 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
   </button>
   <button type="button" data-view="wish">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></svg>行ってみたい
+  </button>
+  <button type="button" data-view="map">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>地図
   </button>
   <button type="button" data-view="types">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v6H4zM13 14h7v6h-7z"/></svg>種類
@@ -487,6 +552,7 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 
 <div class="toast" id="toast" hidden role="status"></div>
 
+<script src="vendor/maplibre-gl.js"></script>
 <script>
 /* ---------- opening sequence ---------- */
 (() => {
@@ -545,13 +611,13 @@ function bowl(hue){
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 const SAMPLES = [
-  {id:'s1', sample:true, shop:'麺処 しおさい', item:'特製塩らーめん', price:1100, pref:'愛知県', place:'名古屋駅店', rating:4.5, date:'2026-10-04', soup:'塩', again:true, memo:'鶏と貝の出汁。チャーシューが2種類。\n次は限定の柚子塩を頼む', photo:bowl(48)},
-  {id:'s2', sample:true, shop:'とんこつ ひなた', item:'味玉とんこつ バリカタ', price:950, pref:'東京都', place:'渋谷店', rating:4.0, date:'2026-09-27', soup:'豚骨', again:false, memo:'替え玉 150円。紅しょうが入れ放題', photo:bowl(28)},
-  {id:'s3', sample:true, shop:'つけ麺 かもめ', item:'濃厚つけ麺 大盛', price:1200, pref:'愛知県', place:'栄店', rating:3.5, date:'2026-09-15', soup:'つけ麺', again:false, memo:'昼は15分待ち。スープ割りがおいしい', photo:bowl(18)},
+  {id:'s1', sample:true, shop:'麺処 しおさい', item:'特製塩らーめん', price:1100, pref:'愛知県', place:'名古屋駅店', lat:35.1709, lng:136.8815, rating:4.5, date:'2026-10-04', soup:'塩', again:true, memo:'鶏と貝の出汁。チャーシューが2種類。\n次は限定の柚子塩を頼む', photo:bowl(48)},
+  {id:'s2', sample:true, shop:'とんこつ ひなた', item:'味玉とんこつ バリカタ', price:950, pref:'東京都', place:'渋谷店', lat:35.6580, lng:139.7016, rating:4.0, date:'2026-09-27', soup:'豚骨', again:false, memo:'替え玉 150円。紅しょうが入れ放題', photo:bowl(28)},
+  {id:'s3', sample:true, shop:'つけ麺 かもめ', item:'濃厚つけ麺 大盛', price:1200, pref:'愛知県', place:'栄店', lat:35.1700, lng:136.9089, rating:3.5, date:'2026-09-15', soup:'つけ麺', again:false, memo:'昼は15分待ち。スープ割りがおいしい', photo:bowl(18)},
 ];
 const WISH_SAMPLES = [
-  {id:'w1', sample:true, shop:'中華そば あおば', pref:'東京都', place:'新宿店', menu:'特製中華そば', memo:'先輩のおすすめ。日曜定休'},
-  {id:'w2', sample:true, shop:'味噌麺 ふゆがれ', pref:'北海道', place:'札幌本店', menu:'辛味噌らーめん', memo:'旅行のときに行く'},
+  {id:'w1', sample:true, shop:'中華そば あおば', pref:'東京都', place:'新宿店', lat:35.6909, lng:139.7003, menu:'特製中華そば', memo:'先輩のおすすめ。日曜定休'},
+  {id:'w2', sample:true, shop:'味噌麺 ふゆがれ', pref:'北海道', place:'札幌本店', lat:43.0687, lng:141.3508, menu:'辛味噌らーめん', memo:'旅行のときに行く'},
 ];
 
 /* ---------- storage: IndexedDB (falls back to memory) ---------- */
@@ -689,13 +755,17 @@ function renderNudge(){
 function renderAll(){ renderStats(); renderAllView(); renderAgain(); renderWish(); renderTypes(); renderNudge(); }
 
 /* ---------- pages ---------- */
+let rLastView = 'all';
 function setView(v){
+  if (v !== 'map') rLastView = v;
   view = v;
   document.querySelectorAll('.view').forEach(s => s.hidden = s.id !== 'view-' + v);
   document.querySelectorAll('.tabbar button').forEach(b => { if (b.dataset.view === v) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   $('#fabLabel').textContent = v === 'wish' ? '行きたい店を追加' : '一杯記録';
   if (v !== 'types' && typeEdit) { typeEdit = false; armedType = null; renderTypes(); }
+  $('#fab').hidden = v === 'map';
   window.scrollTo(0, 0);
+  if (v === 'map') renderMap();
 }
 document.querySelectorAll('.tabbar button').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
 
@@ -852,16 +922,17 @@ $('#camIn').addEventListener('change', async e => {
   const f = e.target.files && e.target.files[0]; e.target.value = '';
   if (!f) return;
   try { setPhoto(await compress(f)); } catch { toast('写真を読み込めませんでした。もう一度撮ってください'); return; }
+  if (!editingId) locateHere(p => { if (p) pendingLoc = p; });   // where the bowl was shot → pin on the map
   $('#fDate').value = (await exifDate(f)) || today();
   const h = $('#dateHint'); h.textContent = '撮影した日を来店日に入れました'; h.hidden = false;
 });
 $('#photoClear').addEventListener('click', () => setPhoto(''));
 
 /* ---------- 記録: open / save ---------- */
-let editingId = null, fromWishId = null;
+let editingId = null, fromWishId = null, pendingLoc = null;
 function openEdit(entry, opts = {}){
   editingId = entry && entry.id && !opts.prefill ? entry.id : null;
-  fromWishId = opts.fromWish || null;
+  fromWishId = opts.fromWish || null; pendingLoc = null;
   $('#editTitle').textContent = editingId ? '記録を直す' : '一杯記録';
   $('#fShop').value = entry?.shop || '';
   $('#fItem').value = entry?.item || '';
@@ -886,6 +957,8 @@ $('#editForm').addEventListener('submit', async e => {
   const prev = entries.find(x => x.id === editingId);
   const priceRaw = $('#fPrice').value.trim();
   const entry = {
+    ...(prev || {}),
+    ...(!prev && pendingLoc ? {lat:pendingLoc.lat, lng:pendingLoc.lng, locSrc:'gps'} : {}),
     id: editingId || newId('b'),
     shop, item: $('#fItem').value.trim(), price: priceRaw === '' ? '' : Math.max(0, Math.round(Number(priceRaw))),
     pref: $('#fPref').value, place: $('#fPlace').value.trim(), rating, date: $('#fDate').value || today(), soup,
@@ -901,6 +974,7 @@ $('#editForm').addEventListener('submit', async e => {
   hide($('#editSheet'));
   if (!$('#detailSheet').hidden) openDetail(entry.id, true);
   renderAll(); toast(msg);
+  autoPlace();
 });
 
 /* ---------- 記録の詳細 ---------- */
@@ -919,6 +993,7 @@ function openDetail(id, refreshOnly){
     ${realPhoto ? '<div class="photo-row"><button class="linkbtn" type="button" id="dSave">写真をiPhoneに保存</button></div>' : ''}
     <div class="dhead">
       <h3 id="dTitle">${esc(e.shop)}</h3>
+      ${snsHTML(e.shop)}
       <p>${esc(e.item || '')}</p>
       <div class="drate">${starsHTML(e.rating||0, 26)}<b>${(e.rating||0).toFixed(1)}</b><span style="color:var(--muted);font-size:13px">${e.rating ? esc(word(e.rating)) : '未評価'}</span></div>
     </div>
@@ -931,6 +1006,7 @@ function openDetail(id, refreshOnly){
       ${e.memo ? `<dt>備考</dt><dd class="memo">${esc(e.memo)}</dd>` : ''}
     </dl>
     ${e.sample ? '' : '<div class="dactions"><button class="btn" type="button" id="dEdit">編集する</button><button class="btn danger" type="button" id="dDel">削除</button></div>'}`;
+  bindSNS($('#detailBody'), e.shop);
   if (realPhoto) $('#dSave').onclick = async () => {
     const file = dataURLtoFile(e.photo, `${e.shop}-${e.date || today()}.jpg`.replace(/[\\/:*?"<>|]/g, ''));
     if (navigator.canShare && navigator.canShare({files:[file]})) {
@@ -973,11 +1049,12 @@ $('#wishForm').addEventListener('submit', async e => {
   const shop = $('#wShop').value.trim();
   if (!shop) { $('#wShopErr').hidden = false; $('#wShop').focus(); return; }
   const prev = wishes.find(w => w.id === wishEditing);
-  const w = { id: wishEditing || newId('w'), shop, pref: $('#wPref').value, place: $('#wPlace').value.trim(), menu: $('#wMenu').value.trim(), memo: $('#wMemo').value.trim(), createdAt: prev?.createdAt || Date.now(), updatedAt: Date.now() };
+  const w = { ...(prev || {}), id: wishEditing || newId('w'), shop, pref: $('#wPref').value, place: $('#wPlace').value.trim(), menu: $('#wMenu').value.trim(), memo: $('#wMemo').value.trim(), createdAt: prev?.createdAt || Date.now(), updatedAt: Date.now() };
   try { await put('wish', w); } catch { toast('保存できませんでした'); return; }
   if (w.pref) lsSet('ramen-memo-pref', w.pref);
   const i = wishes.findIndex(x => x.id === w.id); if (i >= 0) wishes[i] = w; else wishes.push(w);
   hide($('#wishSheet')); renderAll(); toast(prev ? '直しました' : '行ってみたいに追加しました');
+  autoPlace();
 });
 $('#wWent').addEventListener('click', () => { const w = wishes.find(x => x.id === wishEditing); if (w) wentTo(w); });
 $('#wDel').addEventListener('click', async () => {
@@ -1056,8 +1133,209 @@ renderAll();
   renderAll();
 })();
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js', {updateViaCache: 'none'}).then(reg => {
+      // check for a newer version whenever the app comes back to the front
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });
+    }).catch(() => {});
+  });
 }
+
+/* ===== SNS & map (added) ===== */
+/* らーめんメモ — SNS buttons (Instagram / TikTok) and the in-app map (OpenFreeMap; pins from the camera or Google) */
+
+// Google（店名から地図の位置を探す）のキー。Stash と同じキーです。
+const GOOGLE_KEY = 'AIzaSyAfW1T53ezDV9lYvOk8cnZ5pmFCKSE9uT0';
+const PIN_COLORS = {visit:'#4FC3F7', again:'#E53935', wish:'#9B5DE5'};
+
+/* ---------- SNS: copy the name, then open the app ---------- */
+async function copyText(t){ try { await navigator.clipboard.writeText(t); return true; } catch { return false; } }
+function openSNS(kind, name){
+  const n = String(name || '').trim();
+  copyText(n).then(ok => { if (ok) toast(`「${n}」をコピーしました。検索窓に貼り付けもできます`); });
+  const tag = n.replace(/[\s　・･\-–—_.,，。、!！?？'’"“”()（）\[\]［］【】「」『』&＆/／:：#＃]/g, '');
+  const go = (app, web) => {
+    let left = false; const onHide = () => { left = true; };
+    document.addEventListener('visibilitychange', onHide, {once:true});
+    window.location.href = app;
+    setTimeout(() => { document.removeEventListener('visibilitychange', onHide); if (!left && !document.hidden) window.location.href = web; }, 1400);
+  };
+  if (kind === 'ig') go(`instagram://tag?name=${encodeURIComponent(tag)}`, `https://www.instagram.com/explore/tags/${encodeURIComponent(tag)}/`);
+  else go(`snssdk1233://search?keyword=${encodeURIComponent(n)}`, `https://www.tiktok.com/search?q=${encodeURIComponent(n)}`);
+}
+window.lIconOk = img => lIconOk(img);
+function lIconOk(img){ if (img.naturalWidth < 48) img.remove(); else img.parentNode.classList.add('img'); }
+function snsHTML(name){
+  const ig = `<img src="https://www.google.com/s2/favicons?domain=instagram.com&amp;sz=128" alt="" referrerpolicy="no-referrer" onload="lIconOk(this)" onerror="this.remove()">`;
+  const tt = `<img src="icons/link-tiktok.png" alt="" onload="lIconOk(this)" onerror="this.remove()">`;
+  return `<div class="linkrow">
+    <button type="button" class="lbtn ig" data-sns="ig" aria-label="Instagramで「${esc(name)}」を検索"><span class="lico" style="font-size:14px">Insta<br>gram${ig}</span><span class="lname">Instagram</span></button>
+    <button type="button" class="lbtn tt" data-sns="tt" aria-label="TikTokで「${esc(name)}」を検索"><span class="lico" style="font-size:14px">TikTok${tt}</span><span class="lname">TikTok</span></button>
+  </div>`;
+}
+function bindSNS(root, name){ root.querySelectorAll('[data-sns]').forEach(b => b.onclick = () => openSNS(b.dataset.sns, name)); }
+
+/* ---------- position: the camera's place when a bowl is shot, or Google by shop name ---------- */
+function locateHere(cb){
+  if (!navigator.geolocation) { cb(null); return; }
+  navigator.geolocation.getCurrentPosition(p => cb({lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6)}), () => cb(null), {enableHighAccuracy:true, timeout:10000, maximumAge:60000});
+}
+let gLoad = null;
+function gPlaces(){
+  if (!GOOGLE_KEY) return Promise.reject(new Error('no key'));
+  if (!gLoad) gLoad = new Promise((res, rej) => {
+    window.__ramenGmaps = () => res();
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_KEY)}&v=weekly&language=ja&region=JP&loading=async&callback=__ramenGmaps`;
+    s.async = true; s.onerror = () => { gLoad = null; rej(new Error('load')); };
+    document.head.appendChild(s);
+  });
+  return gLoad.then(() => google.maps.importLibrary('places'));
+}
+/* at most 20 look-ups a day on this phone (Google's own daily caps can't be set during the free trial) */
+function gSpend(){
+  const day = today(); let c; try { c = JSON.parse(lsGet('ramen-memo-gcount') || '{}'); } catch { c = {}; }
+  if (c.day !== day) c = {day, n:0};
+  if (c.n >= 20) throw new Error('limit');
+  c.n++; lsSet('ramen-memo-gcount', JSON.stringify(c));
+}
+const placeQuery = r => [String(r.shop || '').trim(), r.pref || '', String(r.place || '').trim()].filter(Boolean).join(' ');
+async function findPlace(r){
+  const q = placeQuery(r);
+  if (r.gplace && r.gplace.q === q) return;
+  gSpend();
+  const {Place} = await gPlaces();
+  const {places} = await Place.searchByText({textQuery:q, fields:['id', 'location'], language:'ja', region:'jp', maxResultCount:1});
+  const p = places && places[0];
+  r.gplace = {q, id:p ? p.id : null, at:Date.now()};
+  if (p && p.location && (r.lat == null || r.locSrc === 'google')) { r.lat = +p.location.lat().toFixed(6); r.lng = +p.location.lng().toFixed(6); r.locSrc = 'google'; }
+  if (!p && r.locSrc === 'google') { r.lat = null; r.lng = null; r.locSrc = null; }
+}
+let autoBusy = false;
+async function autoPlace(onEach){
+  if (autoBusy || !GOOGLE_KEY) return; autoBusy = true;
+  try {
+    const list = [...entries.map(r => ['bowls', r]), ...wishes.map(r => ['wish', r])];
+    for (const [store, r] of list) {
+      if (r.lat != null && r.locSrc !== 'google') continue;
+      if (r.gplace && r.gplace.q === placeQuery(r)) continue;
+      try { await findPlace(r); await put(store, r); onEach && onEach(); } catch { break; }
+    }
+  } finally { autoBusy = false; }
+}
+
+/* ---------- the map tab (full screen, Google-Maps-like) ---------- */
+const OFM_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
+const GSI_STYLE = {version:8, sources:{gsi:{type:'raster', tiles:['https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png'], tileSize:256, maxzoom:18,
+  attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル</a>'}}, layers:[{id:'gsi', type:'raster', source:'gsi'}]};
+const PREF_LL = {北海道:[141.347,43.064],東京都:[139.692,35.690],神奈川県:[139.643,35.448],愛知県:[136.907,35.180],大阪府:[135.520,34.686],京都府:[135.756,35.021],福岡県:[130.418,33.607]};
+let rMap = null, rReady = false, rFallback = false, rPins = [], rHere = null;
+let rShow = (() => { try { return JSON.parse(lsGet('ramen-memo-mapshow')) || {visit:true, again:true, wish:true}; } catch { return {visit:true, again:true, wish:true}; } })();
+const kindOf = r => r._wish ? 'wish' : (r.again ? 'again' : 'visit');
+const mapItems = () => [...shown(), ...shownWish().map(w => ({...w, _wish:true}))].filter(r => r.lat != null && r.lng != null);
+
+function renderChips(){
+  const items = [['visit', '行ったことある'], ['again', 'また行きたい'], ['wish', '行ってみたい']];
+  $('#mapLegend').innerHTML = items.map(([k, l]) => `<button type="button" data-k="${k}" aria-pressed="${!!rShow[k]}"><i style="background:${PIN_COLORS[k]}"></i>${l}</button>`).join('');
+}
+$('#mapLegend').addEventListener('click', e => {
+  const b = e.target.closest('[data-k]'); if (!b) return;
+  rShow[b.dataset.k] = !rShow[b.dataset.k]; lsSet('ramen-memo-mapshow', JSON.stringify(rShow)); renderChips(); drawPins();
+});
+function japaneseLabels(map){
+  for (const layer of map.getStyle().layers || []) {
+    if (layer.type !== 'symbol') continue;
+    const tf = map.getLayoutProperty(layer.id, 'text-field');
+    if (!tf || JSON.stringify(tf).includes('"ref"')) continue;
+    map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', 'name:ja'], ['get', 'name']]);
+  }
+}
+function createMap(center, zoom){
+  rMap = new maplibregl.Map({container:'mapBox', style:OFM_STYLE, center, zoom, minZoom:4, maxZoom:18, attributionControl:{compact:true},
+    localIdeographFontFamily:'"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif', dragRotate:false, pitchWithRotate:false});
+  rMap.touchZoomRotate.disableRotation();
+  const fb = () => { if (!rFallback) { rFallback = true; rMap.setStyle(GSI_STYLE); } };
+  const timer = setTimeout(() => { if (!rReady) fb(); }, 9000);
+  rMap.on('load', () => { rReady = true; clearTimeout(timer); if (!rFallback) try { japaneseLabels(rMap); } catch {} });
+  rMap.on('error', e => { if (!rReady && e && e.error && /style|Failed to fetch|NetworkError|AJAXError/i.test(String(e.error.message || e.error))) fb(); });
+  rMap.on('click', hideCard);
+}
+function pinEl(color){
+  const el = document.createElement('div'); el.className = 'gpin';
+  el.innerHTML = `<svg width="30" height="42" viewBox="0 0 28 40" aria-hidden="true"><path d="M14 0C6.3 0 0 6.2 0 13.9 0 24.3 14 40 14 40s14-15.7 14-26.1C28 6.2 21.7 0 14 0z" fill="${color}" stroke="rgba(0,0,0,.25)" stroke-width="1"/><circle cx="14" cy="14" r="5.2" fill="#fff" fill-opacity=".92"/></svg>`;
+  return el;
+}
+function drawPins(){
+  rPins.forEach(m => m.remove()); rPins = [];
+  const pts = [];
+  for (const r of mapItems()) {
+    const k = kindOf(r); if (!rShow[k]) continue;
+    const el = pinEl(PIN_COLORS[k]); el.title = r.shop;
+    el.addEventListener('click', ev => { ev.stopPropagation(); showCard(r); });
+    rPins.push(new maplibregl.Marker({element:el, anchor:'bottom'}).setLngLat([r.lng, r.lat]).addTo(rMap));
+    pts.push([r.lng, r.lat]);
+  }
+  $('#mapSub').hidden = pts.length > 0;
+  return pts;
+}
+function renderMap(){
+  renderChips(); hideCard(); $('#mapResults').hidden = true; $('#mapQuery').value = '';
+  if (typeof maplibregl === 'undefined') { $('#mapSub').hidden = false; $('#mapSub').textContent = '地図を読み込めませんでした。電波のある場所で開き直してください'; return; }
+  const start = PREF_LL[lastPref()] || [137.5, 36.2];
+  if (!rMap) createMap(start, lastPref() && PREF_LL[lastPref()] ? 10 : 4.5);
+  setTimeout(() => rMap.resize(), 30);
+  $('#mapSub').textContent = '地図に出せるお店がまだありません。カメラで撮ったときの場所や、店名からGoogleマップで探した場所に、自動でピンが立ちます。';
+  const pts = drawPins();
+  if (pts.length === 1) rMap.jumpTo({center:pts[0], zoom:15});
+  else if (pts.length) { const b = new maplibregl.LngLatBounds(pts[0], pts[0]); pts.forEach(p => b.extend(p)); rMap.fitBounds(b, {padding:{top:150, bottom:60, left:40, right:40}, maxZoom:15, duration:0}); }
+  autoPlace(() => { if (view === 'map') drawPins(); });
+}
+function showCard(r){
+  const k = kindOf(r), label = {visit:'行ったことある', again:'また行きたい', wish:'行ってみたい'}[k];
+  const real = r.photo && r.photo.startsWith('data:image');
+  const area = [r.pref, r.place].filter(Boolean).join(' · ');
+  $('#mapCard').innerHTML = `${real ? `<img src="${r.photo}" alt="">` : '<span class="noimg"></span>'}
+    <div><h3>${esc(r.shop)}</h3>
+      <div class="mmeta">${r.rating ? `★${r.rating.toFixed(1)} · ` : ''}<span style="color:${PIN_COLORS[k]};font-weight:700">● ${label}</span>${r.sample ? '（見本）' : ''}</div>
+      ${area ? `<div class="mmeta">${esc(area)}</div>` : ''}
+      <div class="mrow"><button type="button" class="pri" id="mcOpen">くわしく</button><a href="https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}" target="_blank" rel="noopener">経路</a></div>
+    </div><button type="button" class="mx" id="mcClose" aria-label="閉じる">✕</button>`;
+  $('#mapCard').hidden = false; $('#mapLocate').style.bottom = 'calc(var(--sab) + 140px)';
+  $('#mcClose').onclick = hideCard;
+  $('#mcOpen').onclick = () => { if (r._wish) { const w = wishes.find(x => x.id === r.id); if (w) openWish(w); else toast('見本です'); } else openDetail(r.id); };
+  rMap && rMap.easeTo({center:[r.lng, r.lat], offset:[0, -60]});
+}
+function hideCard(){ $('#mapCard').hidden = true; $('#mapLocate').style.bottom = ''; }
+$('#mapClose').addEventListener('click', () => setView(rLastView));
+$('#mapQuery').addEventListener('input', () => {
+  const q = $('#mapQuery').value.trim().toLowerCase(), box = $('#mapResults');
+  if (!q) { box.hidden = true; return; }
+  const all = [...shown(), ...shownWish().map(w => ({...w, _wish:true}))];
+  const hits = all.filter(r => (r.shop || '').toLowerCase().includes(q) || (r.place || '').toLowerCase().includes(q)).slice(0, 12);
+  box.innerHTML = hits.length ? hits.map(r => `<button type="button" data-id="${esc(r.id)}">${esc(r.shop)}<span>${r.lat != null ? esc([r.pref, r.place].filter(Boolean).join(' · ') || '地図で見る') : '場所がわからないため地図に出せません'}</span></button>`).join('') : '<button type="button" disabled>見つかりませんでした</button>';
+  box.hidden = false;
+});
+$('#mapResults').addEventListener('click', e => {
+  const b = e.target.closest('[data-id]'); if (!b) return;
+  const r = [...shown(), ...shownWish().map(w => ({...w, _wish:true}))].find(x => x.id === b.dataset.id);
+  $('#mapResults').hidden = true; $('#mapQuery').blur();
+  if (!r) return;
+  if (r.lat == null) { toast('このお店は場所がわからないため、地図に出せません'); return; }
+  const k = kindOf(r); if (!rShow[k]) { rShow[k] = true; renderChips(); drawPins(); }
+  rMap.jumpTo({center:[r.lng, r.lat], zoom:16}); showCard(r);
+});
+$('#mapLocate').addEventListener('click', () => {
+  toast('現在地を探しています…');
+  locateHere(p => {
+    if (!p) { toast('現在地を取得できませんでした。位置情報の許可を確認してください'); return; }
+    if (!rMap) return;
+    if (rHere) rHere.remove();
+    const el = document.createElement('div'); el.className = 'hereDot';
+    rHere = new maplibregl.Marker({element:el}).setLngLat([p.lng, p.lat]).addTo(rMap);
+    rMap.easeTo({center:[p.lng, p.lat], zoom:15});
+  });
+});
+
 })();
 </script>
 </body>
