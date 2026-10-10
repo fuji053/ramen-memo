@@ -55,6 +55,21 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 .vsub{margin:6px 0 0;color:var(--muted);font-size:13px}
 .gear{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex:none}
 .gear svg{width:21px;height:21px}
+.topbtns{display:flex;gap:8px;flex:none}
+.calnav{display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px}
+.calnav b{font-family:var(--f-display);font-size:20px;font-weight:400}
+.calnav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px;line-height:1}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.calgrid .dow{font-size:11px;font-weight:700;color:var(--muted);padding:4px 0}
+.calgrid .dow.sun{color:#D93025}.calgrid .dow.sat{color:#1a73e8}
+.calgrid .day{position:relative;aspect-ratio:1;border:0;border-radius:12px;background:none;color:var(--ink);font-size:15px;font-weight:500;padding:0;display:flex;align-items:center;justify-content:center}
+.calgrid .day.today{box-shadow:inset 0 0 0 2px var(--line)}
+.calgrid .day.has{background:var(--yolk);color:#fff;font-weight:800;overflow:hidden}
+.calgrid .day.has img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.calgrid .day.has span{position:relative;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.calgrid .day .cnt{position:absolute;top:2px;right:3px;background:#fff;color:var(--ink);border-radius:999px;font-size:9px;font-weight:800;padding:0 4px;line-height:14px;text-shadow:none}
+.calgrid .day.sel{outline:3px solid var(--ink);outline-offset:-1px}
+.calsum{margin:14px 0 8px;font-size:14px;font-weight:700;color:var(--muted)}
 .rim{height:12px;margin:14px 0 18px;background:var(--yolk);
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M1 11V1h10v8H4V4h4v3' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3Cpath d='M13 1v10h10V3h-7v5h4V5' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x left center/24px 12px;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M1 11V1h10v8H4V4h4v3' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3Cpath d='M13 1v10h10V3h-7v5h4V5' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x left center/24px 12px}
@@ -166,7 +181,7 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 /* sheets */
 .sheet{position:fixed;inset:0;z-index:10;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .sheet-in{max-width:640px;margin:0 auto;padding-inline:16px;padding-top:var(--sat);padding-bottom:calc(var(--sab) + 40px)}
-.bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg);padding:10px 0}
+.bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg);margin-top:calc(-1 * var(--sat));padding:calc(var(--sat) + 10px) 0 10px;box-shadow:0 -40px 0 var(--bg)}
 .bar h2{font-family:var(--f-display);font-weight:400;font-size:19px;margin:0}
 .iconbtn{border:0;background:transparent;padding:8px;margin-left:-8px;border-radius:999px;display:flex}
 .iconbtn svg{width:24px;height:24px}
@@ -177,6 +192,27 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 .photo-pick .hint svg{width:40px;height:40px}
 .cambtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;padding:13px;border-radius:12px}
 .cambtn svg{width:20px;height:20px}
+.pbtns2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pbtns2 .btn{display:flex;align-items:center;justify-content:center;gap:6px}
+.pbtns2 svg{width:18px;height:18px}
+.hero{position:relative;margin:14px 0 18px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:var(--led-bg)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(10,8,6,.6));pointer-events:none}
+.hero-cap{position:absolute;left:16px;right:120px;bottom:12px;z-index:1;color:#F6EDE0;font-family:var(--f-display);font-size:14px;letter-spacing:.24em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero-edit{position:absolute;top:10px;right:10px;z-index:2;display:flex;align-items:center;gap:5px;border:0;border-radius:999px;padding:7px 12px;background:rgba(20,12,8,.55);color:#F6EDE0;font-size:12px;font-weight:700;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.hero-edit svg{width:15px;height:15px}
+.hpicks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hpick{position:relative;border:2px solid transparent;border-radius:10px;padding:0;overflow:hidden;background:none;aspect-ratio:1}
+.hpick img{width:100%;height:100%;object-fit:cover;display:block}
+.hpick span{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hpick[aria-pressed="true"]{border-color:var(--yolk)}
+.flabel{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.navrow{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
+.navrow a,.navrow button{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:11px;font-weight:700;font-size:14px;text-decoration:none}
+.navrow .go{background:#1a73e8;border-color:#1a73e8;color:#fff}
+.navrow svg{width:17px;height:17px}
+.tcount{font-family:var(--f-body);font-size:15px;font-weight:700;color:var(--muted);margin-left:8px;vertical-align:middle;letter-spacing:0}
+.sheet.instant:not([hidden]){animation:none!important}
 .photo-row{display:flex;justify-content:flex-end;margin-top:2px}
 
 .form{display:flex;flex-direction:column;gap:16px;margin-top:16px}
@@ -317,15 +353,17 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
   <!-- すべて -->
   <section id="view-all" class="view">
     <header class="top">
-      <h1 class="brand"><span class="eyebrow">一杯ずつ記録する</span>らーめんメモ</h1>
-      <button class="gear" type="button" id="moreBtn" aria-label="設定とバックアップ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <h1 class="brand"><span class="eyebrow">一杯ずつ記録する</span>らーめんメモ<span class="tcount" id="catCount"></span></h1>
+      <div class="topbtns">
+        <button class="gear" type="button" id="calBtn" aria-label="カレンダー"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button>
+        <button class="gear" type="button" id="moreBtn" aria-label="設定とバックアップ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      </div>
     </header>
-    <div class="rim" aria-hidden="true"></div>
-    <section class="stats" aria-label="記録のまとめ">
-      <div class="stat"><b id="sCount">0</b><span>杯</span></div>
-      <div class="stat"><b id="sAvg">-</b><span>平均★</span></div>
-      <div class="stat"><b id="sMonth">0</b><span>今月</span></div>
-    </section>
+    <div class="hero" id="hero">
+      <img id="heroImg" alt="">
+      <div class="hero-cap" id="heroCap"></div>
+      <button class="hero-edit" id="heroEdit" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>写真を変える</button>
+    </div>
     <div class="install" id="installTip" hidden>
       <span><b>アプリとして使うには</b><br>下の共有ボタン（□に↑）→「ホーム画面に追加」。次からはホーム画面のアイコンから開いてください。</span>
       <button class="linkbtn" type="button" id="installClose">閉じる</button>
@@ -422,6 +460,43 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
   </button>
 </nav>
 
+<!-- カレンダー -->
+<div class="sheet" id="calSheet" hidden role="dialog" aria-modal="true" aria-labelledby="calTitle">
+  <div class="sheet-in">
+    <div class="bar">
+      <button class="iconbtn" type="button" data-close aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h2 id="calTitle">カレンダー</h2><span style="width:24px"></span>
+    </div>
+    <div class="calnav"><button type="button" id="calPrev" aria-label="前の月">‹</button><b id="calMonth"></b><button type="button" id="calNext" aria-label="次の月">›</button></div>
+    <div class="calgrid" id="calGrid"></div>
+    <p class="calsum" id="calSum"></p>
+    <div class="list" id="calList"></div>
+  </div>
+</div>
+
+<!-- トップの写真 -->
+<div class="sheet" id="heroSheet" hidden role="dialog" aria-modal="true" aria-labelledby="heroTitle">
+  <div class="sheet-in">
+    <div class="bar">
+      <button class="iconbtn" type="button" data-close aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h2 id="heroTitle">トップの写真</h2>
+      <button class="btn primary" type="button" id="heroSave">保存</button>
+    </div>
+    <div class="form">
+      <div class="photo-pick"><img id="heroPrev" alt="選んだ写真"></div>
+      <div class="pbtns2">
+        <button class="btn" type="button" id="heroCamBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>カメラ</button>
+        <button class="btn" type="button" id="heroLibBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダ</button>
+      </div>
+      <input id="heroCamIn" type="file" accept="image/*" capture="environment" hidden>
+      <input id="heroLibIn" type="file" accept="image/*" hidden>
+      <div><span class="flabel">記録の写真から選ぶ</span><div class="hpicks" id="heroPicks"></div><p class="hint" id="heroNoPicks" hidden>まだ写真のある記録がありません。</p></div>
+      <div class="field"><label for="heroText">写真に重ねる文字</label><input id="heroText" maxlength="24" autocomplete="off" placeholder="例：Ramen"></div>
+      <div class="photo-row"><button class="linkbtn" type="button" id="heroReset">最初の表示に戻す</button></div>
+    </div>
+  </div>
+</div>
+
 <!-- 記録 sheet -->
 <div class="sheet" id="editSheet" hidden role="dialog" aria-modal="true" aria-labelledby="editTitle">
   <div class="sheet-in">
@@ -436,11 +511,15 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
           <img id="photoPrev" alt="撮った写真" hidden>
           <span class="hint" id="photoHint">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-            カメラで撮ると、写真と来店日が自動で入ります
+            写真を入れると、撮った日が自動で入ります
           </span>
         </div>
-        <button class="btn primary cambtn" type="button" id="camBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="camLabel">カメラで撮る</span></button>
+        <div class="pbtns2">
+          <button class="btn primary cambtn" type="button" id="camBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="camLabel">カメラ</span></button>
+          <button class="btn cambtn" type="button" id="libBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダ</button>
+        </div>
         <input id="camIn" type="file" accept="image/*" capture="environment" hidden>
+        <input id="libIn" type="file" accept="image/*" hidden>
         <div class="photo-row"><button class="linkbtn" type="button" id="photoClear" hidden>写真を外す</button></div>
       </div>
 
@@ -480,6 +559,7 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
       <div class="field"><label for="fMemo">備考</label><textarea id="fMemo" placeholder="ちょっとしたメモに。麺の硬さ、トッピング、次に頼みたいもの、待ち時間など"></textarea></div>
 
       <div class="actions"><button class="btn primary" type="submit">保存</button></div>
+      <div class="dactions" id="editDelWrap" hidden><button class="btn danger" type="button" id="fDel">この記録を削除</button></div>
     </form>
   </div>
 </div>
@@ -514,7 +594,7 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
   <div class="sheet-in">
     <div class="bar">
       <button class="iconbtn" type="button" data-close aria-label="戻る"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <span></span>
+      <button class="btn primary" type="button" id="dEditTop">編集</button>
     </div>
     <div id="detailBody"></div>
   </div>
@@ -696,12 +776,7 @@ function wishHTML(arr){
     </div>`).join('');
 }
 
-function renderStats(){
-  const arr = shown(), rated = arr.filter(e => e.rating > 0), m = today().slice(0,7);
-  $('#sCount').textContent = arr.length;
-  $('#sAvg').textContent = rated.length ? (rated.reduce((a,e)=>a+e.rating,0)/rated.length).toFixed(1) : '-';
-  $('#sMonth').textContent = arr.filter(e => (e.date||'').startsWith(m)).length;
-}
+function renderStats(){ $('#catCount').textContent = `${entries.length}杯`; }
 function renderAllView(){
   const q = query.toLowerCase();
   $('#sampleNote').hidden = entries.length > 0 || !!q;
@@ -752,7 +827,7 @@ function renderNudge(){
     el.hidden = false;
   } else el.hidden = true;
 }
-function renderAll(){ renderStats(); renderAllView(); renderAgain(); renderWish(); renderTypes(); renderNudge(); }
+function renderAll(){ renderStats(); renderAllView(); renderAgain(); renderWish(); renderTypes(); renderNudge(); if (!$('#calSheet').hidden) renderCal(); }
 
 /* ---------- pages ---------- */
 let rLastView = 'all';
@@ -878,7 +953,7 @@ let photo = '';
 function setPhoto(p){
   photo = p || '';
   $('#photoPrev').hidden = !photo; $('#photoHint').hidden = !!photo; $('#photoClear').hidden = !photo;
-  $('#camLabel').textContent = photo ? '撮り直す' : 'カメラで撮る';
+  $('#camLabel').textContent = photo ? '撮り直す' : 'カメラ';
   if (photo) $('#photoPrev').src = photo; else $('#photoPrev').removeAttribute('src');
 }
 async function compress(file){
@@ -918,14 +993,17 @@ async function exifDate(file){
   return null;
 }
 $('#camBtn').addEventListener('click', () => $('#camIn').click());
-$('#camIn').addEventListener('change', async e => {
+$('#libBtn').addEventListener('click', () => $('#libIn').click());
+$('#libIn').addEventListener('change', e => takePhoto(e, false));
+$('#camIn').addEventListener('change', e => takePhoto(e, true));
+async function takePhoto(e, fromCamera){
   const f = e.target.files && e.target.files[0]; e.target.value = '';
   if (!f) return;
   try { setPhoto(await compress(f)); } catch { toast('写真を読み込めませんでした。もう一度撮ってください'); return; }
-  if (!editingId) locateHere(p => { if (p) pendingLoc = p; });   // where the bowl was shot → pin on the map
+  if (fromCamera && !editingId) locateHere(p => { if (p) pendingLoc = p; });   // where the bowl was shot → pin on the map
   $('#fDate').value = (await exifDate(f)) || today();
   const h = $('#dateHint'); h.textContent = '撮影した日を来店日に入れました'; h.hidden = false;
-});
+}
 $('#photoClear').addEventListener('click', () => setPhoto(''));
 
 /* ---------- 記録: open / save ---------- */
@@ -933,7 +1011,10 @@ let editingId = null, fromWishId = null, pendingLoc = null;
 function openEdit(entry, opts = {}){
   editingId = entry && entry.id && !opts.prefill ? entry.id : null;
   fromWishId = opts.fromWish || null; pendingLoc = null;
-  $('#editTitle').textContent = editingId ? '記録を直す' : '一杯記録';
+  $('#editTitle').textContent = editingId ? '編集中' : '一杯記録';
+  $('#editSheet').classList.toggle('instant', !!opts.inline);
+  $('#editDelWrap').hidden = !editingId;
+  { const b = $('#fDel'); b.dataset.armed = ''; b.classList.remove('armed'); b.textContent = 'この記録を削除'; }
   $('#fShop').value = entry?.shop || '';
   $('#fItem').value = entry?.item || '';
   $('#fPrice').value = entry?.price ?? '';
@@ -948,7 +1029,6 @@ function openEdit(entry, opts = {}){
   setRating(entry?.rating || 0);
   setPhoto(entry?.photo || '');
   show($('#editSheet'));
-  if (opts.camera) $('#camIn').click();   // same tap: the camera opens right away
 }
 $('#editForm').addEventListener('submit', async e => {
   e.preventDefault();
@@ -997,15 +1077,20 @@ function openDetail(id, refreshOnly){
       <p>${esc(e.item || '')}</p>
       <div class="drate">${starsHTML(e.rating||0, 26)}<b>${(e.rating||0).toFixed(1)}</b><span style="color:var(--muted);font-size:13px">${e.rating ? esc(word(e.rating)) : '未評価'}</span></div>
     </div>
+    <div class="navrow">
+      <a href="${map}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Googleマップ</a>
+    </div>
     <dl class="dl">
       <dt>値段</dt><dd>${yen(e.price)}</dd>
       <dt>来店日</dt><dd>${fmtDate(e.date) || '—'}</dd>
-      <dt>エリア</dt><dd>${esc(e.pref || '—')}${e.place ? ' · ' + esc(e.place) : ''}<br><a href="${map}" target="_blank" rel="noopener">地図で見る ↗</a></dd>
+      <dt>エリア</dt><dd>${esc(e.pref || '—')}${e.place ? ' · ' + esc(e.place) : ''}</dd>
       <dt>種類</dt><dd>${esc(e.soup || '—')}</dd>
       <dt>また行く</dt><dd>${e.again ? '<span class="heart">♥</span> また行きたい' : '—'}</dd>
       ${e.memo ? `<dt>備考</dt><dd class="memo">${esc(e.memo)}</dd>` : ''}
     </dl>
-    ${e.sample ? '' : '<div class="dactions"><button class="btn" type="button" id="dEdit">編集する</button><button class="btn danger" type="button" id="dDel">削除</button></div>'}`;
+    ${e.sample ? '' : '<div class="dactions"><button class="btn danger" type="button" id="dDel">この記録を削除</button></div>'}`;
+  $('#dEditTop').hidden = !!e.sample;
+  $('#dEditTop').onclick = () => openEdit(e, {inline:true});
   bindSNS($('#detailBody'), e.shop);
   if (realPhoto) $('#dSave').onclick = async () => {
     const file = dataURLtoFile(e.photo, `${e.shop}-${e.date || today()}.jpg`.replace(/[\\/:*?"<>|]/g, ''));
@@ -1016,10 +1101,9 @@ function openDetail(id, refreshOnly){
     const a = document.createElement('a'); a.href = e.photo; a.download = file.name; document.body.appendChild(a); a.click(); a.remove();
   };
   if (!e.sample) {
-    $('#dEdit').onclick = () => openEdit(e);
     const b = $('#dDel'); let armed = false, t;
     b.onclick = async () => {
-      if (!armed) { armed = true; b.classList.add('armed'); b.textContent = 'もう一度押すと削除'; t = setTimeout(() => { armed = false; b.classList.remove('armed'); b.textContent = '削除'; }, 3000); return; }
+      if (!armed) { armed = true; b.classList.add('armed'); b.textContent = 'もう一度押すと削除'; t = setTimeout(() => { armed = false; b.classList.remove('armed'); b.textContent = 'この記録を削除'; }, 3000); return; }
       clearTimeout(t);
       try { await del('bowls', e.id); } catch { toast('削除できませんでした'); return; }
       entries = entries.filter(x => x.id !== e.id);
@@ -1028,6 +1112,14 @@ function openDetail(id, refreshOnly){
   }
   if (!refreshOnly) show($('#detailSheet'));
 }
+
+$('#fDel').addEventListener('click', async () => {
+  const b = $('#fDel'), id = editingId; if (!id) return;
+  if (!b.dataset.armed) { b.dataset.armed = '1'; b.classList.add('armed'); b.textContent = 'もう一度押すと削除（元に戻せません）'; setTimeout(() => { b.dataset.armed = ''; b.classList.remove('armed'); b.textContent = 'この記録を削除'; }, 3500); return; }
+  try { await del('bowls', id); } catch { toast('削除できませんでした'); return; }
+  entries = entries.filter(x => x.id !== id);
+  hide($('#editSheet')); hide($('#detailSheet')); renderAll(); toast('削除しました');
+});
 
 /* ---------- 行ってみたい ---------- */
 let wishEditing = null;
@@ -1042,7 +1134,7 @@ function openWish(w){
   show($('#wishSheet'));
 }
 function wentTo(w){
-  openEdit({shop:w.shop, pref:w.pref, place:w.place, item:w.menu || '', memo:w.memo || ''}, {prefill:true, fromWish:w.id, camera:true});
+  openEdit({shop:w.shop, pref:w.pref, place:w.place, item:w.menu || '', memo:w.memo || ''}, {prefill:true, fromWish:w.id});
 }
 $('#wishForm').addEventListener('submit', async e => {
   e.preventDefault();
@@ -1076,7 +1168,7 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('wish')) { e.preventDefault(); e.target.click(); } });
 
 /* ---------- FAB ---------- */
-$('#fab').addEventListener('click', () => { if (view === 'wish') openWish(null); else openEdit(null, {camera:true}); });
+$('#fab').addEventListener('click', () => { if (view === 'wish') openWish(null); else openEdit(null); });
 
 /* ---------- search / sort ---------- */
 $('#q').addEventListener('input', e => { query = e.target.value.trim(); renderAllView(); });
@@ -1129,6 +1221,8 @@ renderAll();
   try { entries = await getAll('bowls'); } catch { entries = []; }
   try { wishes = await getAll('wish'); } catch { wishes = []; }
   try { const t = await getMeta('types'); if (Array.isArray(t)) types = t; } catch {}
+  try { hero = (await getMeta('hero')) || null; } catch {}
+  applyHero();
   try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch {}
   renderAll();
 })();
@@ -1140,6 +1234,85 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
     }).catch(() => {});
   });
 }
+
+/* ===== Google navigation: open the Google Maps app with directions (web Google Maps if the app is not there) ===== */
+function startNav(r){
+  const dest = r.lat != null ? `${r.lat},${r.lng}` : [r.shop, r.pref, r.place].filter(Boolean).join(' ');
+  const app = `comgooglemaps://?daddr=${encodeURIComponent(dest)}`;
+  const web = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
+  let left = false; const onHide = () => { left = true; };
+  document.addEventListener('visibilitychange', onHide, {once:true});
+  window.location.href = app;
+  setTimeout(() => { document.removeEventListener('visibilitychange', onHide); if (!left && !document.hidden) window.location.href = web; }, 1400);
+}
+
+/* ===== calendar: days with a bowl are marked; tap a day to open what was eaten ===== */
+let calY, calM, calSel = '';
+const pad2 = n => String(n).padStart(2, '0');
+function byDay(){
+  const m = new Map();
+  for (const e of shown()) { if (!e.date) continue; if (!m.has(e.date)) m.set(e.date, []); m.get(e.date).push(e); }
+  return m;
+}
+function renderCal(){
+  const days = byDay(), first = new Date(calY, calM, 1), n = new Date(calY, calM + 1, 0).getDate(), lead = first.getDay();
+  const ym = `${calY}-${pad2(calM + 1)}`, td = today();
+  $('#calMonth').textContent = `${calY}年${calM + 1}月`;
+  let html = ['日', '月', '火', '水', '木', '金', '土'].map((d, i) => `<div class="dow${i === 0 ? ' sun' : i === 6 ? ' sat' : ''}">${d}</div>`).join('');
+  html += '<div></div>'.repeat(lead);
+  let monthCount = 0;
+  for (let d = 1; d <= n; d++) {
+    const key = `${ym}-${pad2(d)}`, list = days.get(key) || [];
+    monthCount += list.length;
+    const pic = list.find(e => e.photo && e.photo.startsWith('data:image'));
+    html += `<button type="button" class="day${list.length ? ' has' : ''}${key === td ? ' today' : ''}${key === calSel ? ' sel' : ''}" data-day="${key}"${list.length ? '' : ' disabled'} aria-label="${calM + 1}月${d}日${list.length ? `・${list.length}杯` : ''}">${pic ? `<img src="${pic.photo}" alt="">` : ''}<span>${d}</span>${list.length > 1 ? `<i class="cnt">${list.length}</i>` : ''}</button>`;
+  }
+  $('#calGrid').innerHTML = html;
+  const sel = calSel && calSel.startsWith(ym) ? (days.get(calSel) || []) : [];
+  $('#calSum').textContent = sel.length ? `${Number(calSel.slice(5, 7))}月${Number(calSel.slice(8))}日：${sel.length}杯` : (monthCount ? `${calM + 1}月は${monthCount}杯。日付をタップするとその日の記録が開きます` : `${calM + 1}月の記録はまだありません`);
+  $('#calList').innerHTML = sel.length > 1 ? cardsHTML(sel) : '';
+}
+$('#calBtn').addEventListener('click', () => {
+  const t = today(); calY = Number(t.slice(0, 4)); calM = Number(t.slice(5, 7)) - 1; calSel = '';
+  renderCal(); show($('#calSheet'));
+});
+$('#calPrev').addEventListener('click', () => { calM--; if (calM < 0) { calM = 11; calY--; } calSel = ''; renderCal(); });
+$('#calNext').addEventListener('click', () => { calM++; if (calM > 11) { calM = 0; calY++; } calSel = ''; renderCal(); });
+$('#calGrid').addEventListener('click', e => {
+  const b = e.target.closest('[data-day]'); if (!b || b.disabled) return;
+  const list = byDay().get(b.dataset.day) || [];
+  if (list.length === 1) { calSel = b.dataset.day; renderCal(); openDetail(list[0].id); return; }   // one bowl → open it
+  calSel = b.dataset.day; renderCal();                                                                // several → list them below
+});
+
+/* ===== top photo (like Stash) ===== */
+let hero = null, heroDraft = null;
+const HERO_DEFAULT = {photo:'splash/1.jpg', caption:'Ramen'};
+function applyHero(){
+  const h = hero && hero.photo ? hero : HERO_DEFAULT;
+  $('#heroImg').src = h.photo;
+  $('#heroCap').textContent = (hero && hero.caption) || HERO_DEFAULT.caption;
+}
+function renderHeroSheet(){
+  $('#heroPrev').src = heroDraft.photo || HERO_DEFAULT.photo;
+  const list = entries.filter(e => e.photo && e.photo.startsWith('data:image/jpeg'));
+  $('#heroNoPicks').hidden = list.length > 0;
+  $('#heroPicks').innerHTML = list.map(e => `<button type="button" class="hpick" data-hid="${esc(e.id)}" aria-pressed="${heroDraft.photo === e.photo}"><img src="${e.photo}" alt=""><span>${esc(e.shop)}</span></button>`).join('');
+}
+$('#heroEdit').addEventListener('click', () => { heroDraft = hero ? {...hero} : {photo:'', caption:''}; $('#heroText').value = heroDraft.caption || ''; renderHeroSheet(); show($('#heroSheet')); });
+$('#heroPicks').addEventListener('click', e => { const b = e.target.closest('[data-hid]'); if (!b) return; const r = entries.find(x => x.id === b.dataset.hid); if (r) { heroDraft.photo = r.photo; renderHeroSheet(); } });
+const heroTake = async ev => { const f = ev.target.files && ev.target.files[0]; ev.target.value = ''; if (!f) return; try { heroDraft.photo = await compress(f); renderHeroSheet(); } catch { toast('写真を読み込めませんでした'); } };
+$('#heroCamBtn').addEventListener('click', () => $('#heroCamIn').click());
+$('#heroLibBtn').addEventListener('click', () => $('#heroLibIn').click());
+$('#heroCamIn').addEventListener('change', heroTake);
+$('#heroLibIn').addEventListener('change', heroTake);
+$('#heroReset').addEventListener('click', () => { heroDraft = {photo:'', caption:''}; $('#heroText').value = ''; renderHeroSheet(); });
+$('#heroSave').addEventListener('click', async () => {
+  heroDraft.caption = $('#heroText').value.trim();
+  hero = heroDraft.photo || heroDraft.caption ? {...heroDraft} : null;
+  try { await setMeta('hero', hero); } catch { toast('保存できませんでした'); return; }
+  applyHero(); hide($('#heroSheet')); toast('トップの写真を変えました');
+});
 
 /* ===== SNS & map (added) ===== */
 /* らーめんメモ — SNS buttons (Instagram / TikTok) and the in-app map (OpenFreeMap; pins from the camera or Google) */
@@ -1298,10 +1471,11 @@ function showCard(r){
     <div><h3>${esc(r.shop)}</h3>
       <div class="mmeta">${r.rating ? `★${r.rating.toFixed(1)} · ` : ''}<span style="color:${PIN_COLORS[k]};font-weight:700">● ${label}</span>${r.sample ? '（見本）' : ''}</div>
       ${area ? `<div class="mmeta">${esc(area)}</div>` : ''}
-      <div class="mrow"><button type="button" class="pri" id="mcOpen">くわしく</button><a href="https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}" target="_blank" rel="noopener">経路</a></div>
+      <div class="mrow"><button type="button" class="pri" id="mcOpen">くわしく</button><button type="button" id="mcNav">ナビ開始</button></div>
     </div><button type="button" class="mx" id="mcClose" aria-label="閉じる">✕</button>`;
   $('#mapCard').hidden = false; $('#mapLocate').style.bottom = 'calc(var(--sab) + 140px)';
   $('#mcClose').onclick = hideCard;
+  $('#mcNav').onclick = () => startNav(r);
   $('#mcOpen').onclick = () => { if (r._wish) { const w = wishes.find(x => x.id === r.id); if (w) openWish(w); else toast('見本です'); } else openDetail(r.id); };
   rMap && rMap.easeTo({center:[r.lng, r.lat], offset:[0, -60]});
 }

@@ -1,5 +1,5 @@
 // らーめんメモ — offline support. Bump VERSION when files change so phones pick up the update.
-const VERSION = 'ramen-memo-v4';
+const VERSION = 'ramen-memo-v8';
 const FONTS = VERSION + '-fonts';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './vendor/maplibre-gl.js', './vendor/maplibre-gl.css', './icons/link-tiktok.png', './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png',
   './splash/1.jpg', './splash/2.jpg', './splash/3.jpg', './splash/logo.png', './splash/seal.png'];
