@@ -202,7 +202,7 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 .dsec{margin-top:18px}
 .dsec h4{margin:0 0 8px;font-size:14px;font-weight:700}
 .mgrid{display:grid;gap:2px;border-radius:var(--r);overflow:hidden}
-.mgrid button{display:block;border:0;padding:0;background:var(--surface);cursor:zoom-in;min-width:0}
+.mgrid button{position:relative;overflow:hidden;display:block;border:0;padding:0;background:var(--surface);cursor:zoom-in;min-width:0}
 .mgrid img{width:100%;height:100%;object-fit:cover;display:block}
 .mgrid.n1{grid-template-columns:1fr}.mgrid.n1 button{aspect-ratio:4/3}
 .mgrid.n2{grid-template-columns:1fr 1fr}.mgrid.n2 button{aspect-ratio:3/4}
@@ -217,6 +217,8 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 .pone{display:flex;align-items:center;justify-content:center;gap:6px;width:100%}.pone svg{width:18px;height:18px}
 .mgrid.sq{grid-template-columns:repeat(3,1fr);border-radius:0;margin-inline:-16px}.mgrid.sq button{aspect-ratio:1}
 .psec.sq .pthumbs{grid-template-columns:repeat(3,1fr);gap:2px}.psec.sq .pthumb{border-radius:0;border:0}
+.dph{position:relative;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;background:var(--surface)}.dph .dphoto{height:100%;aspect-ratio:auto;border-radius:0}
+.fnote{font-size:12px;color:var(--muted);margin:6px 0 0}
 .viewer{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
 .viewer[hidden]{display:none}
 .viewer img{max-width:100%;max-height:100%;object-fit:contain}
@@ -551,6 +553,7 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
         <input id="camIn" type="file" accept="image/*" capture="environment" hidden>
         <input id="libIn" type="file" accept="image/*" hidden>
         <div class="photo-row"><button class="linkbtn" type="button" id="photoClear" hidden>写真を外す</button></div>
+        <p class="fnote">入れた写真は、枠に見えている範囲がそのまま表示されます。2本指で寄る・引く・動かすと調整できます</p>
       </div>
 
       <div class="psec big" data-ps="ramenPhotos"><span class="flabel">ラーメンの写真</span><div class="pthumbs"></div><button class="btn cambtn pone" type="button" data-plib><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>写真フォルダから追加</button></div>
@@ -986,9 +989,10 @@ $('#formTypeAdd').addEventListener('click', formAddType);
 $('#formNewType').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); formAddType(); } });
 
 /* ---------- camera photo + date ---------- */
-let photo = '';
-function setPhoto(p){
-  photo = p || '';
+let photo = '', photoF = null;
+function setPhoto(p, f){
+  photo = p || ''; photoF = photo && f ? f : null;
+  $('#photoPrev').style.cssText = fstyle(photoF, 4/3);
   $('#photoPrev').hidden = !photo; $('#photoHint').hidden = !!photo; $('#photoClear').hidden = !photo;
   $('#camLabel').textContent = photo ? '撮り直す' : 'カメラ';
   if (photo) $('#photoPrev').src = photo; else $('#photoPrev').removeAttribute('src');
@@ -1043,14 +1047,69 @@ async function takePhoto(e, fromCamera){
 }
 $('#photoClear').addEventListener('click', () => setPhoto(''));
 
+/* ---------- 見える範囲: 枠の上で2本指で寄る・引く・動かす (元の写真は残し、表示だけ変える) ---------- */
+// f = {s:倍率 (1 = 枠いっぱい。1未満は写真全体が入るまで引ける), cx,cy:枠の真ん中に来る写真上の位置(0〜1), a:写真の横÷縦}, R = 枠の横÷縦
+const fdims = (f, R) => { const wr = f.s * Math.max(1, f.a / R); return [wr, wr * R / f.a]; };
+function fclamp(f, R){
+  const sMin = Math.min(1, f.a / R) / Math.max(1, f.a / R);
+  f.s = Math.min(5, Math.max(sMin, Number(f.s) || 1));
+  const [wr, hr] = fdims(f, R), lim = (v, w) => { const a = .5 / w, b = 1 - .5 / w; return Math.min(Math.max(a, b), Math.max(Math.min(a, b), v ?? .5)); };
+  f.cx = lim(f.cx, wr); f.cy = lim(f.cy, hr);
+  return f;
+}
+function fstyle(f, R){
+  if (!f || !f.a) return '';
+  const g = fclamp({...f}, R), [wr, hr] = fdims(g, R), P = v => (v * 100).toFixed(3) + '%';
+  return `position:absolute;max-width:none;object-fit:fill;width:${P(wr)};height:${P(hr)};left:${P(.5 - g.cx * wr)};top:${P(.5 - g.cy * hr)}`;
+}
+/* box = 枠, R = 枠の比率, get() = 今の範囲 (なければ null), set(f) = 決まった範囲を覚える */
+function bindFrame(box, R, get, set){
+  const img = box.querySelector('img'); if (!img) return;
+  let last = null, work = null;
+  const mid = t => ({x:(t[0].clientX + t[1].clientX) / 2, y:(t[0].clientY + t[1].clientY) / 2, d:Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY)});
+  box.addEventListener('touchstart', e => {
+    if (e.touches.length < 2) return;
+    e.preventDefault();
+    const a = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 0; if (!a) return;
+    const f = get(); work = {s:f?.s ?? 1, cx:f?.cx ?? .5, cy:f?.cy ?? .5, a:f?.a || a};
+    last = mid(e.touches);
+  }, {passive:false});
+  box.addEventListener('touchmove', e => {
+    if (!work || e.touches.length < 2) return;
+    e.preventDefault();
+    const g = mid(e.touches), r = box.getBoundingClientRect(), f = work;
+    const mx = last.x - r.left - r.width / 2, my = last.y - r.top - r.height / 2;
+    let [wr, hr] = fdims(f, R); const u = f.cx + mx / (r.width * wr), v = f.cy + my / (r.height * hr);
+    if (last.d > 0) f.s *= g.d / last.d;
+    fclamp(f, R); [wr, hr] = fdims(f, R);
+    f.cx = u - mx / (r.width * wr) - (g.x - last.x) / (r.width * wr);
+    f.cy = v - my / (r.height * hr) - (g.y - last.y) / (r.height * hr);
+    fclamp(f, R); img.style.cssText = fstyle(f, R);
+    last = g;
+  }, {passive:false});
+  const end = e => {
+    if (!work || e.touches.length >= 2) return;
+    const f = fclamp(work, R), r4 = v => Math.round(v * 10000) / 10000;
+    set({s:r4(f.s), cx:r4(f.cx), cy:r4(f.cy), a:r4(f.a)});
+    work = null; last = null;
+  };
+  box.addEventListener('touchend', end); box.addEventListener('touchcancel', end);
+  box.addEventListener('gesturestart', e => e.preventDefault());
+}
+bindFrame($('#photoPrev').closest('.photo-pick'), 4/3, () => photo ? photoF : null, f => { if (photo) photoF = f; });
+
 /* ---------- ラーメン・メニュー・サイドメニューの写真 (何枚でも) ---------- */
 const PSECS = [['ramenPhotos', 'ラーメン', 'big'], ['menuPhotos', 'メニュー', 'wide'], ['sidePhotos', 'その他', 'sq']];
 const PHOTO_MAX = {ramenPhotos:20, menuPhotos:20, sidePhotos:100};
+const FKEY = {ramenPhotos:'ramenFrames', menuPhotos:'menuFrames', sidePhotos:'sideFrames'};
+const secR = k => k === 'menuPhotos' ? 16 / 9 : 1;
 let extra = {ramenPhotos:[], menuPhotos:[], sidePhotos:[]}, pTarget = 'ramenPhotos';
 function renderPSecs(){
   $$('.psec').forEach(sec => {
     const k = sec.dataset.ps;
-    sec.querySelector('.pthumbs').innerHTML = extra[k].map((p, i) => `<div class="pthumb"><img src="${p}" alt=""><button type="button" class="px" data-pdel="${i}" aria-label="${i + 1}枚目を外す">×</button></div>`).join('');
+    const wrap = sec.querySelector('.pthumbs');
+    wrap.innerHTML = extra[k].map((o, i) => `<div class="pthumb"><img src="${o.src}" alt="" style="${fstyle(o.f, secR(k))}"><button type="button" class="px" data-pdel="${i}" aria-label="${i + 1}枚目を外す">×</button></div>`).join('');
+    wrap.querySelectorAll('.pthumb').forEach((box, i) => { const o = extra[k][i]; bindFrame(box, secR(k), () => o.f, f => { o.f = f; }); });
   });
 }
 $$('.psec').forEach(sec => sec.addEventListener('click', e => {
@@ -1066,7 +1125,7 @@ async function addExtra(ev){
   if (files.length > 2) toast('写真を読み込んでいます…');
   for (const f of files) {
     if (arr.length >= PHOTO_MAX[pTarget]) { toast(`ここに入れられるのは${PHOTO_MAX[pTarget]}枚までです`); break; }
-    try { arr.push(await compress(f)); } catch { toast('読み込めない写真がありました'); }
+    try { arr.push({src:await compress(f), f:null}); } catch { toast('読み込めない写真がありました'); }
   }
   renderPSecs();
 }
@@ -1075,10 +1134,10 @@ $('#plIn').addEventListener('change', addExtra);
 /* 詳細ページ: すき間なく並べる・タップで大きく */
 function photoSecsHTML(e){
   return PSECS.map(([k, label, mode]) => {
-    const ps = (e[k] || []).filter(p => typeof p === 'string' && p);
+    const ps = (e[k] || []), fs = e[FKEY[k]] || [], R = secR(k);
     if (!ps.length) return '';
     const n = ps.length, cls = mode ? mode : n <= 3 ? 'n' + n : `many${n % 3 ? ' r' + (n % 3) : ''}`;
-    const tile = (p, i) => `<button type="button" data-pv="${k}:${i}" aria-label="${label}の写真${i + 1}枚目を大きく見る"><img src="${p}" alt="" loading="lazy"></button>`;
+    const tile = (p, i) => `<button type="button" data-pv="${k}:${i}" aria-label="${label}の写真${i + 1}枚目を大きく見る"><img src="${p}" alt="" loading="lazy" style="${fstyle(fs[i], R)}"></button>`;
     const grid = mode === 'big'   // 1枚目だけ大きな正方形、2枚目からは正方形3列
       ? `<div class="mgrid big">${tile(ps[0], 0)}</div>${n > 1 ? `<div class="mgrid sq">${ps.slice(1).map((p, i) => tile(p, i + 1)).join('')}</div>` : ''}`
       : `<div class="mgrid ${cls}">${ps.map(tile).join('')}</div>`;
@@ -1111,8 +1170,9 @@ function openEdit(entry, opts = {}){
   soup = entry?.soup ?? (view === 'types' && typeSel !== 'all' ? typeSel : '');
   renderSoups();
   setRating(entry?.rating || 0);
-  setPhoto(entry?.photo || '');
-  extra = {ramenPhotos:[...(entry?.ramenPhotos || [])], menuPhotos:[...(entry?.menuPhotos || [])], sidePhotos:[...(entry?.sidePhotos || [])]};
+  setPhoto(entry?.photo || '', entry?.photoFrame);
+  extra = {};
+  for (const k of Object.keys(FKEY)) extra[k] = (entry?.[k] || []).map((src, i) => ({src, f:(entry?.[FKEY[k]] || [])[i] || null}));
   renderPSecs();
   show($('#editSheet'));
 }
@@ -1129,7 +1189,8 @@ $('#editForm').addEventListener('submit', async e => {
     shop, item: $('#fItem').value.trim(), price: priceRaw === '' ? '' : Math.max(0, Math.round(Number(priceRaw))),
     pref: $('#fPref').value, place: $('#fPlace').value.trim(), rating, date: $('#fDate').value || today(), soup,
     again: $('#fAgain').checked, memo: $('#fMemo').value.trim(), photo,
-    ramenPhotos: extra.ramenPhotos.slice(), menuPhotos: extra.menuPhotos.slice(), sidePhotos: extra.sidePhotos.slice(),
+    photoFrame: photo ? photoF : null,
+    ...Object.fromEntries(Object.keys(FKEY).flatMap(k => [[k, extra[k].map(o => o.src)], [FKEY[k], extra[k].map(o => o.f || null)]])),
     createdAt: prev?.createdAt || Date.now(), updatedAt: Date.now(),
   };
   try { await put('bowls', entry); } catch { toast('保存できませんでした。iPhoneの空き容量を確認してください'); return; }
@@ -1156,7 +1217,7 @@ function openDetail(id, refreshOnly){
   const realPhoto = e.photo && e.photo.startsWith('data:image/jpeg');
   $('#detailBody').innerHTML = `
     ${e.sample ? '<p class="note" style="margin-top:0">これは見本です。編集や削除はできません。</p>' : ''}
-    <div class="dph"><img class="dphoto" src="${e.photo || bowl(40)}" alt="${esc(e.shop)}の外観の写真">${realPhoto ? '<span class="dtag">外観</span>' : ''}</div>
+    <div class="dph"><img class="dphoto" style="${realPhoto ? fstyle(e.photoFrame, 4/3) : ''}" src="${e.photo || bowl(40)}" alt="${esc(e.shop)}の外観の写真">${realPhoto ? '<span class="dtag">外観</span>' : ''}</div>
     ${realPhoto ? '<div class="photo-row"><button class="linkbtn" type="button" id="dSave">写真をiPhoneに保存</button></div>' : ''}
     <div class="dhead">
       <h3 id="dTitle">${esc(e.shop)}</h3>
