@@ -171,6 +171,7 @@ button{cursor:pointer;-webkit-user-select:none;user-select:none}
 .panel p{margin:0;color:var(--muted)}
 .panel ol{margin:8px 0 0;padding-left:1.4em;color:var(--muted)}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.msteps{margin:8px 0 10px;padding-left:1.3em;line-height:1.8}
 .btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px;font-weight:500;font-size:14px}
 .btn.primary{background:var(--yolk);border-color:var(--yolk);color:#1C231E;font-weight:700}
 .btn.danger{color:var(--chili);border-color:var(--chili)}
@@ -646,6 +647,11 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
       <h2 id="moreTitle">設定とバックアップ</h2><span></span>
     </div>
     <div class="panel">
+      <h3>機種変更するとき</h3>
+      <p>今のiPhoneで保存して、新しいiPhoneで戻す手順を案内します。</p>
+      <div class="row"><button class="btn primary" type="button" id="moveOpen" style="width:100%">機種変更の準備</button></div>
+    </div>
+    <div class="panel">
       <h3>バックアップ</h3>
       <p>記録と写真はこのiPhoneの中だけに保存されます。機種変更やアプリを消す前に書き出して、「ファイルに保存」しておいてください。</p>
       <p class="note" id="backupNudge" hidden></p>
@@ -668,6 +674,28 @@ body:has(#view-map:not([hidden])) .toast{top:calc(var(--sat) + 116px)}
   </div>
 </div>
 
+<!-- 機種変更の準備 -->
+<div class="sheet" id="moveSheet" hidden role="dialog" aria-modal="true" aria-labelledby="moveTitle">
+  <div class="sheet-in">
+    <div class="bar">
+      <button class="iconbtn" type="button" data-close aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h2 id="moveTitle">機種変更の準備</h2><span style="width:24px"></span>
+    </div>
+    <div class="panel">
+      <h3>① 今のiPhoneで</h3>
+      <p>記録と写真を、1つのファイルにまとめて保存します。</p>
+      <ol class="msteps"><li>下のボタンを押す</li><li>出てきた画面で「“ファイル”に保存」を押す</li><li>「iCloud Drive」を選んで「保存」</li></ol>
+      <p class="note" id="moveLast"></p>
+      <div class="row"><button class="btn primary" type="button" id="moveSave" style="width:100%">記録を保存する</button></div>
+    </div>
+    <div class="panel">
+      <h3>② 新しいiPhoneで</h3>
+      <ol class="msteps"><li>Safariでこのアプリを開き、共有ボタン（□に↑）→「ホーム画面に追加」</li><li>アプリを開いて、右上の歯車 →「機種変更の準備」</li><li>下のボタンを押して、①で保存したファイルを選ぶ</li></ol>
+      <div class="row"><button class="btn primary" type="button" id="moveLoad" style="width:100%">保存したファイルから戻す</button></div>
+      <p style="margin-top:8px;font-size:13px">新しいiPhoneも、前と同じApple IDでiCloudにサインインしておいてください。Stashは別のアプリなので、そちらでも保存が必要です。</p>
+    </div>
+  </div>
+</div>
 <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="写真"><img id="viewerImg" alt=""><span class="vhint">タップで閉じる</span></div>
 <div class="toast" id="toast" hidden role="status"></div>
 
@@ -1327,7 +1355,7 @@ $('#q').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(
 $('#sort').addEventListener('change', e => { sortBy = e.target.value; lsSet('ramen-memo-sort', sortBy); renderAllView(); });
 
 /* ---------- backup ---------- */
-$('#exportBtn').addEventListener('click', async () => {
+async function doExport(){
   if (!entries.length && !wishes.length) { toast('まだ記録がありません'); return; }
   const name = `ramen-memo-${today()}.json`;
   const json = JSON.stringify({app:'ramen-memo', version:1, exportedAt:new Date().toISOString(), types, entries, wishes});
@@ -1340,7 +1368,17 @@ $('#exportBtn').addEventListener('click', async () => {
   const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = name;
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   done();
-});
+}
+$('#exportBtn').addEventListener('click', doExport);
+/* 機種変更の準備 */
+function openMoveSheet(){
+  const last = Number(lsGet('ramen-memo-backup')) || 0;
+  $('#moveLast').textContent = last ? `前回保存した日：${fmtDate(ymd(new Date(last)))}` : 'まだ一度も保存していません';
+  show($('#moveSheet'));
+}
+$('#moveOpen').addEventListener('click', openMoveSheet);
+$('#moveSave').addEventListener('click', async () => { await doExport(); openMoveSheet(); });
+$('#moveLoad').addEventListener('click', () => $('#importFile').click());
 $('#importBtn').addEventListener('click', () => $('#importFile').click());
 $('#importFile').addEventListener('change', async e => {
   const f = e.target.files && e.target.files[0]; e.target.value = '';
